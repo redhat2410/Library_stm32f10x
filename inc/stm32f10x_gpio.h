@@ -1,5 +1,7 @@
 #define __STM32F10x_GPIO_H
 
+
+//GPIO PORT
 typedef enum{
 	GPIOPORT_A	= 0x04,
 	GPIOPORT_B	=	0x08,
@@ -8,6 +10,8 @@ typedef enum{
 	GPIOPORT_E	=	0x40
 }GPIOPORT;
 
+
+//GPIO MODE
 typedef enum{
 	MODE_INPUT			=	0x00,
 	MODE_OUTPUT_10M	=	0x01,
@@ -15,6 +19,8 @@ typedef enum{
 	MODE_OUTPUT_50M	=	0x03
 }GPIOMODE;
 
+
+//GPIO CONFIG
 typedef enum{
 	IN_ANALOG_MODE		= 0x00,
 	IN_FLOATING_MODE 	= 0x01,
@@ -25,6 +31,8 @@ typedef enum{
 	OUT_AFOPENDRAIN		=	0x0C	//11
 }GPIOCONF;
 
+
+//GPIO TYPE BIT
 typedef enum{
 	BIT_RESET		=	0,
 	BIT_SET			=	1,

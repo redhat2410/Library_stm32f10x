@@ -1,6 +1,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_i2c.h"
 
+#ifdef	USE_I2C
 void I2C_configuration_master(void){
 	//Enable clock for I2C1
 	*RCC.APB1ENR	|= (1 << 21);
@@ -40,3 +41,4 @@ void I2C_configuration_slave(void){
 	
 }
 
+#endif

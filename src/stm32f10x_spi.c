@@ -1,6 +1,8 @@
 #include "stm32f10x.h"
 #include "stm32f10x_spi.h"
 
+#ifdef	USE_SPI
+
 SPI_Typedef*	SPI_SELECT_X(SPIx SPI){
 	SPI_Typedef* tmp;
 	switch(SPI){
@@ -40,7 +42,7 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 		//set mode slave
 		*spi->CR1 &=	~(1 << 2);
 	//set data frame 8 or 16 bits
-	if(frame == DFF_8_BITS) *spi->CR1 &=	~(1 << 11);
+	if(frame == SPI_DFF_8_BITS) *spi->CR1 &=	~(1 << 11);
 	else *spi->CR1	|=	(1 << 11);
 	//Configure LSBFIRST bit
 	*spi->CR1 &= ~(1 << 7);
@@ -78,3 +80,4 @@ unsigned char SPI_ReadData(SPIx SPI){
 	return (uint8_t)*spi->DR;
 }
 
+#endif

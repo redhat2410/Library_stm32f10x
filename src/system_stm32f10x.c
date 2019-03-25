@@ -9,23 +9,31 @@ GPIO_Typedef		GPIOD;
 GPIO_Typedef		GPIOE;
 AFIO_Typedef		AFIO;
 EXTI_Typedef		EXTI;
+#ifdef	USE_UART
 USART_Typedef		USART1;
 USART_Typedef		USART2;
 USART_Typedef		USART3;
 USART_Typedef		UART4;
 USART_Typedef		UART5;
+#endif
 NVIC_Typedef		NVIC;
 SCB_Typedef			SCB;
 STK_Typedef			STK;
+#ifdef	USE_SPI
 SPI_Typedef			SPI1;
 SPI_Typedef			SPI2;
 SPI_Typedef			SPI3;
+#endif
+#ifdef	USE_I2C
 I2C_Typedef			I2C1;
 I2C_Typedef			I2C2;
+#endif
+#ifdef	USE_TIM
 TIM1_8_Typedef		TIM1;
 TIM2_5_Typedef		TIM2;
 TIM6_7_Typedef		TIM6;
 TIM6_7_Typedef		TIM7;
+#endif
 
 
 void SetSysClock72(void);
@@ -217,7 +225,7 @@ void EXTI_init(void){
 	EXTI.SWIER		=	(uint32_t*)0x40010410;
 	EXTI.PR				=	(uint32_t*)0x40010414;
 }
-
+#ifdef	USE_UART
 void USART1_init(void){
 	USART1.SR				=	(uint32_t*)0x40013800;
 	USART1.DR				=	(uint32_t*)0x40013804;
@@ -275,6 +283,7 @@ void USART_register_init(void){
 	UART4_init();
 	UART5_init();
 }
+#endif
 
 void NVIC_init(void){
 	uint32_t address_0 = 0xE000E100;
@@ -331,6 +340,7 @@ void SCB_init(void){
 	
 }
 
+#ifdef	USE_SPI
 void SPI1_init(void){
 	SPI1.CR1			=	(uint32_t*)0x40013000;
 	SPI1.CR2			=	(uint32_t*)0x40013004;
@@ -372,7 +382,9 @@ void SPI_register_init(void){
 	SPI2_init();
 	SPI3_init();
 }
+#endif
 
+#ifdef	USE_I2C
 void I2C1_init(void){
 	I2C1.CR1			=	(uint32_t*)0x40005400;
 	I2C1.CR2			=	(uint32_t*)0x40005404;
@@ -401,7 +413,9 @@ void I2C_register_init(void){
 	I2C1_init();
 	I2C2_init();
 }
+#endif
 
+#ifdef	USE_TIM
 void TIM1_init(void){	
 	TIM1.CR1			=	(uint32_t*)0x40012C00;
 	TIM1.CR2			=	(uint32_t*)0x40012C04;
@@ -464,6 +478,7 @@ void TIM_register_init(void){
 	TIM2_init();
 	TIM6_init();
 }
+#endif
 
 void peripheral_register_init(void){
 	//khoi tao dia chi thanh ghi cho RCC va FLASH
@@ -475,8 +490,16 @@ void peripheral_register_init(void){
 	NVIC_init();
 	SYST_init();
 	SCB_init();
+#ifdef	USE_UART
 	USART_register_init();
+#endif
+#ifdef	USE_SPI
 	SPI_register_init();
+#endif
+#ifdef	USE_I2C
 	I2C_register_init();
+#endif
+#ifdef	USE_TIM
 	TIM_register_init();
+#endif
 }

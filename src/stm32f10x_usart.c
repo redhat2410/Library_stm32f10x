@@ -1,6 +1,8 @@
+
 #include "stm32f10x.h"
 #include "stm32f10x_usart.h"
 
+#ifdef	USE_UART
 
 USART_Typedef* USART_SELECT_X(USARTX usart){
 	USART_Typedef* tmp;
@@ -55,3 +57,4 @@ unsigned char USART_ReadData(USARTX usart){
 	return (uint8_t)*usartx->DR;
 }
 
+#endif

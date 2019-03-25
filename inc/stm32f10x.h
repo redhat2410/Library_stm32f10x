@@ -1,4 +1,5 @@
 #define __STM32F10x_H
+#include "define.h"
 
 typedef unsigned char		uint8_t;
 typedef unsigned short	uint16_t;
@@ -182,6 +183,9 @@ typedef struct{
 	volatile uint32_t*	CALIB;
 }STK_Typedef;
 
+
+#ifdef USE_UART
+
 typedef struct{
 	volatile uint32_t*	SR;
 	volatile uint32_t*	DR;
@@ -192,6 +196,9 @@ typedef struct{
 	volatile uint32_t*	GTPR;
 }USART_Typedef;
 
+#endif
+
+#ifdef USE_SPI
 typedef struct{
 	volatile uint32_t*	CR1;
 	volatile uint32_t*	CR2;
@@ -203,6 +210,10 @@ typedef struct{
 	volatile uint32_t*	I2SCFGR;
 	volatile uint32_t*	I2SPR;
 }SPI_Typedef;
+
+#endif
+
+#ifdef USE_I2C
 
 typedef struct{
 	volatile uint32_t*	CR1;
@@ -216,6 +227,9 @@ typedef struct{
 	volatile uint32_t*	TRISE;
 }I2C_Typedef;
 
+#endif
+
+#ifdef USE_TIM
 //Typedef register for TIM1 - 8
 typedef struct{
 	volatile uint32_t*	CR1;
@@ -289,6 +303,7 @@ typedef struct{
 	volatile uint32_t*	PSC;
 	volatile uint32_t*	ARR;
 }TIM6_7_Typedef;
+#endif
 
 extern RCC_Typedef		RCC;
 extern FLASH_Typedef	FLASH;
@@ -302,18 +317,30 @@ extern SCB_Typedef		SCB;
 extern AFIO_Typedef		AFIO;
 extern EXTI_Typedef		EXTI;
 extern STK_Typedef		STK;
+
+#ifdef USE_UART
 extern USART_Typedef	USART1;
 extern USART_Typedef	USART2;
 extern USART_Typedef	USART3;
 extern USART_Typedef	UART4;
 extern USART_Typedef	UART5;
+#endif
+
+#ifdef USE_SPI
 extern SPI_Typedef		SPI1;
 extern SPI_Typedef		SPI2;
 extern SPI_Typedef		SPI3;
+#endif
+
+#ifdef USE_I2C
 extern I2C_Typedef		I2C1;
 extern I2C_Typedef		I2C2;
+#endif
+
+#ifdef USE_TIM
 extern TIM1_8_Typedef	TIM1;
 extern TIM2_5_Typedef	TIM2;
 extern TIM6_7_Typedef	TIM6;
 extern TIM6_7_Typedef TIM7;
+#endif
 
