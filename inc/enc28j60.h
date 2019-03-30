@@ -203,3 +203,37 @@
 
 /*********************Memory Oganization*********************/
 
+/******************Function Definitions******************/
+/*
+	The function initSPI implement configuration SPI has communication ENC28J60
+		- pinout SPI
+		-	setup SPI
+*/
+void initSPI(void);
+/*
+	The function enableChip implement control pin NSS 
+		control Host -> ENC28J60
+		enable -> NSS = LOW
+*/
+void enableChip(void);
+/*
+	The function disableChip implement control pin NSS
+		control Host -> ENC28J60
+		disable -> NSS = HIGH
+*/
+void disableChip(void);
+/*
+	The function writeOP implement write Operation by SPI
+	Operation SPI and address have been description 
+	@param		operation			type		uint8_t	
+	@param		address				type		uint8_t
+	@param		data					type		uint8_t
+*/
+void writeOp(unsigned char op, unsigned char address, unsigned char data);
+/*
+	The function readOp implement read operation by SPI
+	Operation SPI and address have been description 
+	@param		operation			type		uint8_t
+	@param		address				type		uint8_t
+*/
+unsigned char readOp(unsigned char op, unsigned char address);

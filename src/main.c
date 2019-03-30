@@ -6,6 +6,7 @@
 #include "Queue.h"
 #include "Stack.h"
 #include "stm32f10x.h"
+#include "enc28j60.h"
 #include "math.h"
 
 
@@ -26,11 +27,11 @@ int main(){
 	//MOSI
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 7);
 	
-	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_8, SPI_YES, SPI1_IRQn); 
+	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_8, SPI_NO, SPI1_IRQn); 
 	while(1){
-		if(dem == 0x01)
-			SPI_WriteData(SPIx1, 0x03);
-		else SPI_WriteData(SPIx1, 0x01);
+		SPI_WriteData(SPIx1, 0x01);
+		dem = SPI_ReadData(SPIx1);
+		
 	}
 }
 
@@ -38,9 +39,9 @@ void delay(long time){
 	while(time-- >= 0);
 }
 
-void SPI1_IRQHandler(){
-	if(SPI_ReadData(SPIx1) == 0x01) dem++;
-}
+//void SPI1_IRQHandler(){
+//	if(SPI_ReadData(SPIx1) == 0x01) dem++;
+//}
 
 
 
