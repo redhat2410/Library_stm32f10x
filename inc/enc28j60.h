@@ -237,3 +237,11 @@ void writeOp(unsigned char op, unsigned char address, unsigned char data);
 	@param		address				type		uint8_t
 */
 unsigned char readOp(unsigned char op, unsigned char address);
+
+void setBank(unsigned char address);
+unsigned char readRegByte(unsigned char address);
+unsigned short readReg(unsigned char address);
+void writeRegByte(unsigned char address, unsigned char data);
+void writeReg(unsigned char address, unsigned short data);
+unsigned short readPhyByte(unsigned char address);
+void writePhy(unsigned char address, unsigned short data);

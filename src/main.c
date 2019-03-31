@@ -16,9 +16,10 @@ int main(){
 	peripheral_register_init();
 	SystemInit();
 	initSPI();
-	writeOp(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_BSEL1|ECON1_BSEL0);
+	writeOp(ENC28J60_WRITE_CTRL_REG, ECON1, ECON1_BSEL0);
 	delay(10000);
 	dem = readOp(ENC28J60_READ_CTRL_REG, ECON1);
+	while(1);
 	
 }
 
@@ -26,9 +27,9 @@ void delay(long time){
 	while(time-- >= 0);
 }
 
-//void SPI1_IRQHandler(){
-//	if(SPI_ReadData(SPIx1) == 0x01) dem++;
-//}
+void SPI1_IRQHandler(){
+	dem = SPI_ReadData(SPIx1);
+}
 
 
 
