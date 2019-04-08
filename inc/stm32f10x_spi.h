@@ -78,5 +78,7 @@ typedef enum{
 void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE baud, SPI_IT it, unsigned char vector);
 void SPI_WriteData(SPIx SPI, unsigned char data);
 unsigned char SPI_ReadData(SPIx SPI);
+void SPI_WriteData_16bit(SPIx SPI, unsigned short data);
+unsigned short SPI_ReadData_16bit(SPIx SPI);
 /**************SPI FUNCTION CONFIGURATION**************/
 

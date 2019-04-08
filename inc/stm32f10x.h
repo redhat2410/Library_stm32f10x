@@ -98,7 +98,9 @@ extern void SysTick_Handler(void);
 void NVIC_SetPriority(IRQn_Typedef IRQn, uint32_t priority);
 void NVIC_SetPriority_SysTick(uint32_t priority);
 //define function stm32f10x_systick.c
-uint32_t Systick_Config(uint32_t tick);
+uint32_t Systick_Config(uint32_t SYSCLK);
+void delay_ms(uint16_t ms);
+void delay_us(uint32_t us);
 /*****************************************************************************/
 
 typedef struct{

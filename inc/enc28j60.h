@@ -236,7 +236,7 @@ void writeOp(unsigned char op, unsigned char address, unsigned char data);
 	@param		operation			type		uint8_t
 	@param		address				type		uint8_t
 */
-unsigned char readOp(unsigned char op, unsigned char address);
+unsigned short readOp(unsigned char op, unsigned char address);
 
 void setBank(unsigned char address);
 unsigned char readRegByte(unsigned char address);

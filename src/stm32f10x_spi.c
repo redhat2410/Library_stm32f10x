@@ -63,7 +63,7 @@ Function implement send data
 void SPI_WriteData(SPIx SPI, unsigned char data){
 	SPI_Typedef*	spi	=	SPI_SELECT_X(SPI);
 	//write data into DR register
-	*spi->DR	= (uint32_t)data;
+	*spi->DR	= (uint16_t)data;
 	//Wait flag TXE set
 	while(!(*spi->SR >> 1) & (uint32_t)0x01);
 }
@@ -78,6 +78,27 @@ unsigned char SPI_ReadData(SPIx SPI){
 	while(!(*spi->SR & (uint32_t)0x01));
 	//Read data in DR register
 	return (uint8_t)*spi->DR;
+}
+
+/*
+	Function SPI_WriteData_16bit implement write data with length 16bit
+*/
+void SPI_WriteData_16bit(SPIx SPI, uint16_t data){
+	SPI_Typedef*	spi = SPI_SELECT_X(SPI);
+	//write data into DR register
+	*spi->DR = data;
+	//Wait flag TXE set
+	while(!(*spi->SR >> 1) & (uint32_t)0x01);
+}
+/*
+	Function SPI_ReadData_16bit implement read data with length 16bit
+*/
+uint16_t SPI_ReadData_16bit(SPIx SPI){
+	SPI_Typedef* spi = SPI_SELECT_X(SPI);
+	//Wait flag RXE set
+	while(!(*spi->SR & (uint32_t)0x01));
+	//Read data in DR register
+	return (uint16_t)*spi->DR;
 }
 
 #endif
