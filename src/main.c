@@ -28,11 +28,8 @@ int main(){
 	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_128, SPI_YES, SPI1_IRQn);
 	GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
 	while(1){
-		//dem = readOp(ENC28J60_READ_CTRL_REG, ECON1);
-		
 		SPI_WriteData(SPIx1, 0x01);
 		delay_ms(500);
-
 	}
 	
 }
