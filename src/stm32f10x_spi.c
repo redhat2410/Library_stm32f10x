@@ -37,6 +37,19 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 		*spi->CR1 |= (1 << 2);
 		//set baud rate only mode master
 		*spi->CR1	|= (baud << 3);
+		// In mode master, config clock and NSS
+		*spi->CR1 |= (1 << 1); //config bit CPOL in CR1
+		*spi->CR1 &= ~(1 << 0); // config bit CPHA in CR1
+		//config NSS in SOFTWARE (HARDWARE)
+		/*
+			How to config NSS pin
+			Case SSM = 1 (Software)
+				pinout NSS of stm32f10x isn't use and it can use as GPIO
+				* Need set bit SSOE, if it wasn't set, The flag MODF should be set. (MODF fault)
+			Case SSM = 0 (Hardware)
+		*/
+		*spi->CR1 |= (1 << 9); //config bit SSM
+		*spi->CR1 |= (1 << 8); //config bit SSOE
 	}
 	else
 		//set mode slave
@@ -45,12 +58,9 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 	if(frame == SPI_DFF_8_BITS) *spi->CR1 &=	~(1 << 11);
 	else *spi->CR1	|=	(1 << 11);
 	//Configure LSBFIRST bit
-	*spi->CR1 &= ~(1 << 7);
+	*spi->CR1 |= (1 << 7);
 	//Setup interrupt receiver
 	*spi->CR2 |=	(it << 6);
-	//Set up NSS software 
-	*spi->CR1 |=	(1 << 9);
-	*spi->CR1	|=	(1 << 8);
 	//Enable SPI
 	*spi->CR1 |=	(1 << 6);
 	if(it == SPI_YES) NVIC_SetPriority((IRQn_Typedef)vector, 1);
@@ -63,7 +73,7 @@ Function implement send data
 void SPI_WriteData(SPIx SPI, unsigned char data){
 	SPI_Typedef*	spi	=	SPI_SELECT_X(SPI);
 	//write data into DR register
-	*spi->DR	= (uint16_t)data;
+	*spi->DR	= (uint8_t)data;
 	//Wait flag TXE set
 	while(!(*spi->SR >> 1) & (uint32_t)0x01);
 }

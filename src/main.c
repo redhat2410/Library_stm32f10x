@@ -15,7 +15,7 @@ int main(){
 	SystemInit();
 	Systick_Config(72);
 	
-	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_PUSHPULL, 13);
+	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 13);
 	
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 5);
 	//Config pin MISO
@@ -25,11 +25,14 @@ int main(){
 	//Config pin NSS
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_PUSHPULL, 4);
 	
-	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_128, SPI_YES, SPI1_IRQn);
-	GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
+	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_16, SPI_NO, SPI1_IRQn);
+	
 	while(1){
-		SPI_WriteData(SPIx1, 0x01);
-		delay_ms(500);
+		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
+		SPI_WriteData(SPIx1, 0x1F);
+		delay_ms(100);
+		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
+		delay_ms(100);
 	}
 	
 }
@@ -37,8 +40,6 @@ int main(){
 
 void SPI1_IRQHandler(){
 	dem = SPI_ReadData(SPIx1);
-	delay_ms(10);
-	//GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
 }
 
 
