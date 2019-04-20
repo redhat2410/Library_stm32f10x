@@ -63,14 +63,14 @@ typedef enum{
 
 //BAUD RATE only use with mode MASTER
 typedef enum{
-	SPI_FCLK_2		=	0x000,
-	SPI_FCLK_4		=	0x001,
-	SPI_FCLK_8		=	0x010,
-	SPI_FCLK_16		=	0x011,
-	SPI_FCLK_32		=	0x100,
-	SPI_FCLK_64		=	0x101,
-	SPI_FCLK_128	=	0x110,
-	SPI_FLCK_256	=	0x111
+	SPI_FCLK_2		=	0x0,
+	SPI_FCLK_4		=	0x1,
+	SPI_FCLK_8		=	0x2,
+	SPI_FCLK_16		=	0x3,
+	SPI_FCLK_32		=	0x4,
+	SPI_FCLK_64		=	0x5,
+	SPI_FCLK_128	=	0x6,
+	SPI_FLCK_256	=	0x7
 }SPI_BAUDRATE;
 
 

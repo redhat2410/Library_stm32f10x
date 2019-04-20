@@ -15,6 +15,7 @@ int main(){
 	SystemInit();
 	Systick_Config(72);
 	
+	//Config pin Enable SPI
 	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 13);
 	
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 5);
@@ -25,17 +26,18 @@ int main(){
 	//Config pin NSS
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_PUSHPULL, 4);
 	
-	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_16, SPI_NO, SPI1_IRQn);
+	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_128, SPI_NO, SPI1_IRQn);
 	
 	while(1){
-		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
-		SPI_WriteData(SPIx1, 0x1F);
-		delay_ms(100);
-		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
-		delay_ms(100);
+		for(dem = 0; dem < 100; dem++){
+			GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
+			SPI_WriteData(SPIx1, dem);
+			GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
+			delay_ms(1000);
+		}
 	}
 	
-}
+} 
 
 
 void SPI1_IRQHandler(){

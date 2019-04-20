@@ -38,8 +38,10 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 		//set baud rate only mode master
 		*spi->CR1	|= (baud << 3);
 		// In mode master, config clock and NSS
-		*spi->CR1 |= (1 << 1); //config bit CPOL in CR1
+		*spi->CR1 &= ~(1 << 1); //config bit CPOL in CR1
 		*spi->CR1 &= ~(1 << 0); // config bit CPHA in CR1
+		//Configure LSBFIRST bit
+		*spi->CR1 &= ~(1 << 7);
 		//config NSS in SOFTWARE (HARDWARE)
 		/*
 			How to config NSS pin
@@ -49,7 +51,7 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 			Case SSM = 0 (Hardware)
 		*/
 		*spi->CR1 |= (1 << 9); //config bit SSM
-		*spi->CR1 |= (1 << 8); //config bit SSOE
+		*spi->CR1 |= (1 << 8); //config bit SSI
 	}
 	else
 		//set mode slave
@@ -57,8 +59,6 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 	//set data frame 8 or 16 bits
 	if(frame == SPI_DFF_8_BITS) *spi->CR1 &=	~(1 << 11);
 	else *spi->CR1	|=	(1 << 11);
-	//Configure LSBFIRST bit
-	*spi->CR1 |= (1 << 7);
 	//Setup interrupt receiver
 	*spi->CR2 |=	(it << 6);
 	//Enable SPI
