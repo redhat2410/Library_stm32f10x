@@ -11,6 +11,8 @@
 uint16_t dem= 0x0000;
 
 int main(){
+	SPI_Configure config;
+	
 	peripheral_register_init();
 	SystemInit();
 	Systick_Config(72);
@@ -27,21 +29,30 @@ int main(){
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_PUSHPULL, 4);
 	
 	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_128, SPI_NO, SPI1_IRQn);
+	/*
+	config.spi 					= SPIx1;
+	config.spiMode 			= SPI_MASTER;
+	config.spiFrame 		= SPI_DFF_8_BITS;
+	config.spiBaudrate	= SPI_FCLK_128;
+	config.spiIT				=	SPI_NO;
+	config.spiFirst			=	SPI_FirstMSB;
+	config.spiModeClock	=	SPI_CLOCK_1;
+	config.spiNSS				=	SPI_NSS_Software;
+	SPI_Init(config);*/
+	
 	
 	while(1){
-		for(dem = 0; dem < 100; dem++){
-			GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
-			SPI_WriteData(SPIx1, dem);
-			GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
-			delay_ms(1000);
-		}
+		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
+		SPI_WriteData(SPIx1, 0xAA);
+		dem = SPI_ReadData(SPIx1);
+		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
 	}
 	
 } 
 
 
 void SPI1_IRQHandler(){
-	dem = SPI_ReadData(SPIx1);
+	dem = SPI_ReadData(SPIx1); 
 }
 
 
