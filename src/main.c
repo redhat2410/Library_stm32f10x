@@ -49,7 +49,7 @@ int main(){
 		//Write data in control register
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
 		SPI_WriteData(SPIx1, ENC28J60_WRITE_CTRL_REG | ECON1 );
-		delay_ms(10);
+		//delay_ms(10);
 		SPI_WriteData(SPIx1, ECON1_BSEL0); // ECON1_BSEL1   ECON1_BSEL0
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
 		//delay_ms(50);
