@@ -194,10 +194,15 @@ Function implement send data
 */
 void SPI_WriteData(SPIx SPI, unsigned char data){
 	SPI_Typedef*	spi	=	SPI_SELECT_X(SPI);
+	uint32_t temp;
+	//Check flag TXE is reset 
+	if((*spi->SR & (uint32_t)0x40) == (uint32_t)0x40)
+			temp = *spi->DR;
 	//write data into DR register
 	*spi->DR	= (uint8_t)data;
 	//Wait flag TXE set
-	while(!(*spi->SR >> 1) & (uint32_t)0x01);
+	while(!((*spi->SR >> 1) & (uint32_t)0x01));
+	//otherwise shall not be write data in reg DR
 }
 
 /*	Function SPI_ReadData with parameter
@@ -232,5 +237,18 @@ uint16_t SPI_ReadData_16bit(SPIx SPI){
 	//Read data in DR register
 	return (uint16_t)*spi->DR;
 }
+
+/*
+	Function HandleError implement process when error flags was set
+*/
+uint32_t SPI_HandleError(SPIx SPI){
+	uint32_t temp = 0;
+	SPI_Typedef* spi = SPI_SELECT_X(SPI);
+	//process error flag OVR
+	if((*spi->SR & (uint32_t)0x40) == (uint32_t)0x40)
+		temp = *spi->DR;
+	return temp;
+}
+
 
 #endif

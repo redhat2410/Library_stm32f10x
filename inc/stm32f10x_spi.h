@@ -138,5 +138,6 @@ void SPI_WriteData(SPIx SPI, unsigned char data);
 unsigned char SPI_ReadData(SPIx SPI);
 void SPI_WriteData_16bit(SPIx SPI, unsigned short data);
 unsigned short SPI_ReadData_16bit(SPIx SPI);
+unsigned int SPI_HandleError(SPIx SPI);
 /**************SPI FUNCTION CONFIGURATION**************/
 

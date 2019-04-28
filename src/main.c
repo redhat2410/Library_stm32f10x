@@ -31,14 +31,14 @@ int main(){
 	//Config pin NSS
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_PUSHPULL, 4);
 	
-	SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_128, SPI_NO, SPI1_IRQn);
+	//SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_256, SPI_NO, SPI1_IRQn);
 	
 	config.spi 					= SPIx1;
 	config.spiMode 			= SPI_MASTER;
 	config.spiFrame 		= SPI_DFF_8_BITS;
 	config.spiBaudrate	= SPI_FCLK_128;
-	config.spiIT				=	SPI_NO;
-	config.spiFirst			=	SPI_FirstLSB;
+	config.spiIT				=	SPI_ERR;
+	config.spiFirst			=	SPI_FirstMSB;
 	config.spiModeClock	=	SPI_CLOCK_1;
 	config.spiNSS				=	SPI_NSS_Software;
 	SPI_Init(config);
@@ -49,11 +49,11 @@ int main(){
 		//Write data in control register
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
 		SPI_WriteData(SPIx1, ENC28J60_WRITE_CTRL_REG | ECON1 );
-		//delay_ms(10);
+		delay_ms(50);
 		SPI_WriteData(SPIx1, ECON1_BSEL0); // ECON1_BSEL1   ECON1_BSEL0
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
-		//delay_ms(50);
 		
+		delay_ms(100);
 		//Read dat in control register
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
 		SPI_WriteData(SPIx1, ENC28J60_READ_CTRL_REG | ECON1 );
@@ -66,7 +66,7 @@ int main(){
 
 
 void SPI1_IRQHandler(){
-	dem = SPI_ReadData(SPIx1); 
+	SPI_HandleError(SPIx1);
 }
 
 
