@@ -35,7 +35,7 @@ int main(){
 	
 	config.spi 					= SPIx1;
 	config.spiMode 			= SPI_MASTER;
-	config.spiFrame 		= SPI_DFF_8_BITS;
+	config.spiFrame 		= SPI_DFF_16_BITS;
 	config.spiBaudrate	= SPI_FCLK_128;
 	config.spiIT				=	SPI_ERR;
 	config.spiFirst			=	SPI_FirstMSB;
@@ -48,18 +48,21 @@ int main(){
 	while(1){
 		//Write data in control register
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
-		SPI_WriteData(SPIx1, ENC28J60_WRITE_CTRL_REG | ECON1 );
-		delay_ms(50);
-		SPI_WriteData(SPIx1, ECON1_BSEL0); // ECON1_BSEL1   ECON1_BSEL0
+		delay_ms(100);
+		SPI_WriteData_16bit(SPIx1, (ENC28J60_WRITE_CTRL_REG | ECON1) << 8 );
+		delay_ms(100);
+		SPI_WriteData_16bit(SPIx1, ECON1_BSEL0); // ECON1_BSEL1   ECON1_BSEL0
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
 		
 		delay_ms(100);
 		//Read dat in control register
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
-		SPI_WriteData(SPIx1, ENC28J60_READ_CTRL_REG | ECON1 );
-		delay_us(10);
+		SPI_WriteData_16bit(SPIx1, (ENC28J60_READ_CTRL_REG | ECON1) << 8 );
+		delay_ms(100);
 		temp_1 = SPI_ReadData(SPIx1);
+		delay_ms(100);
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
+		delay_ms(100);
 	}
 	
 } 

@@ -7,4 +7,5 @@
 #define __DEFINE_H__
 
 #define USE_SPI
+#define USE_UART
 
