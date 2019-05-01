@@ -14,55 +14,27 @@ uint8_t temp_1 = 0x00;
 uint8_t temp_2 = 0x00;
 
 int main(){
-	SPI_Configure config;
+	//SPI_Configure config;
+	USART_Configure config;
 	
 	peripheral_register_init();
 	SystemInit();
 	Systick_Config(72);
 	
-	//Config pin Enable SPI
-	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 13);
+	//configure pinout for usart
+	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 9); // TX
+	GPIO_configuration(GPIOPORT_A, MODE_INPUT, IN_FLOATING_MODE, 10); // RX
+		
+	config.usart = USARTx1;
+	config.baud = USART_BR_9600;
+	config.length = USART_D_8_BITS;
+	config.stop = USART_SP_1BIT;
+	config.it = USART_IT_RXNEIE_RST & USART_IT_TCIE_RST & USART_IT_TXEIE_RST;
 	
-	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 5);
-	//Config pin MISO
-	GPIO_configuration(GPIOPORT_A, MODE_INPUT, IN_FLOATING_MODE, 6);
-	//Config pin MOSI
- 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 7);
-	//Config pin NSS
-	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_PUSHPULL, 4);
-	
-	//SPI_configuration(SPIx1, SPI_MASTER, SPI_DFF_8_BITS, SPI_FCLK_256, SPI_NO, SPI1_IRQn);
-	
-	config.spi 					= SPIx1;
-	config.spiMode 			= SPI_MASTER;
-	config.spiFrame 		= SPI_DFF_16_BITS;
-	config.spiBaudrate	= SPI_FCLK_128;
-	config.spiIT				=	SPI_ERR;
-	config.spiFirst			=	SPI_FirstMSB;
-	config.spiModeClock	=	SPI_CLOCK_1;
-	config.spiNSS				=	SPI_NSS_Software;
-	SPI_Init(config);
-	
-	GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
+	USART_Init(config);
 	
 	while(1){
-		//Write data in control register
-		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
-		delay_ms(100);
-		SPI_WriteData_16bit(SPIx1, (ENC28J60_WRITE_CTRL_REG | ECON1) << 8 );
-		delay_ms(100);
-		SPI_WriteData_16bit(SPIx1, ECON1_BSEL0); // ECON1_BSEL1   ECON1_BSEL0
-		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
-		
-		delay_ms(100);
-		//Read dat in control register
-		GPIO_WriteBit(GPIOPORT_C, 13, BIT_RESET);
-		SPI_WriteData_16bit(SPIx1, (ENC28J60_READ_CTRL_REG | ECON1) << 8 );
-		delay_ms(100);
-		temp_1 = SPI_ReadData(SPIx1);
-		delay_ms(100);
-		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
-		delay_ms(100);
+		temp_1 = USART_ReadData(config.usart);
 	}
 	
 } 

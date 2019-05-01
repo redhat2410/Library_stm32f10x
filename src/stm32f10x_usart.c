@@ -60,31 +60,18 @@ void USART_Init(USART_Configure config){
 	
 	//set bit stop
 	*usartx->CR2 |= (config.stop << 12);
+	//set baundrate for uart
+	*usartx->BRR = (uint32_t)config.baud;
 	//set transmitter and receiver
 	*usartx->CR1 |= (1 << 3); //Transmitter
 	*usartx->CR1 |= (1 << 2); //Receiver
 	//Interrupt TXEIE, TCIE and RXNEIE
-	switch((uint8_t)config.it){
-		case USART_IT_NO:
-				*usartx->CR1 &= ~(1 << 7); // disable interrupt TXEIE
-				*usartx->CR1 &= ~(1 << 6); // disable interrupt TCIE ( transmission complete interrupt enable)
-				*usartx->CR1 &= ~(1 << 5); // disable interrupt RXNE
-			break;
-		case USART_IT_RXNEIE:
-				*usartx->CR1 |= (1 << 5); //Enable interrupt RXNE
-				*usartx->CR1 &= ~(1 << 6);
-				*usartx->CR1 &= ~(1 << 7);
-			break;
-		case USART_IT_TCIE:
-				*usartx->CR1 |= (1 << 6);
-			break;
-		case USART_IT_TXEIE:
-			break;
-		default:
-			break;
-	}
-	
-	
+	if(config.it < 0 && config.it >= -225)
+		*usartx->CR1 &= config.it;
+	else
+		*usartx->CR1 |= config.it;
+	//Set priority in NVIC
+	NVIC_SetPriority((IRQn_Typedef)USART1_IRQn, 1);
 }
 
 
