@@ -33,13 +33,11 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 	else *RCC.APB1ENR	|=	SPI;
 	//Select mode for SPI ( master or slave)
 	if(mode == SPI_MASTER){
-		//set mode master
-		*spi->CR1 |= (1 << 2);
 		//set baud rate only mode master
 		*spi->CR1	|= (baud << 3);
 		// In mode master, config clock and NSS
-		*spi->CR1 |= (1 << 1); //config bit CPOL in CR1
-		*spi->CR1 &= ~(1 << 0); // config bit CPHA in CR1
+		*spi->CR1 &= ~(1 << 1); //config bit CPOL in CR1
+		*spi->CR1 &= ~(1 << 0); //config bit CPHA in CR1
 		//config NSS in SOFTWARE (HARDWARE)
 		/*
 			How to config NSS pin
@@ -49,7 +47,9 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 			Case SSM = 0 (Hardware)
 		*/
 		*spi->CR1 |= (1 << 9); //config bit SSM
-		*spi->CR1 |= (1 << 8); //config bit SSOE
+		*spi->CR1 |= (1 << 8); //config bit SSI
+		//set mode master
+		*spi->CR1 |= (1 << 2);
 	}
 	else
 		//set mode slave
