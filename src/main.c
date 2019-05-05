@@ -10,13 +10,28 @@
 
 uint8_t dem= 0x00;
 
+uint8_t temp_1 = 0x00;
+uint8_t temp_2 = 0x00;
+
 int main(){
+	//SPI_Configure config;
+	USART_Configure config;
+	
 	peripheral_register_init();
 	SystemInit();
 	Systick_Config(72);
 	
-	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 13);
+	//configure pinout for usart
+	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 9); // TX
+	GPIO_configuration(GPIOPORT_A, MODE_INPUT, IN_FLOATING_MODE, 10); // RX
+		
+	config.usart = USARTx1;
+	config.baud = USART_BR_9600;
+	config.length = USART_D_8_BITS;
+	config.stop = USART_SP_1BIT;
+	config.it = USART_IT_RXNEIE_RST & USART_IT_TCIE_RST & USART_IT_TXEIE_RST;
 	
+<<<<<<< HEAD
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 5);
 	//Config pin MISO
 	GPIO_configuration(GPIOPORT_A, MODE_INPUT, IN_FLOATING_MODE, 6);
@@ -33,13 +48,19 @@ int main(){
 		SPI_WriteData(SPIx1, 0x1F);
 		GPIO_WriteBit(GPIOPORT_C, 13, BIT_SET);
 		delay_ms(100);
+=======
+	USART_Init(config);
+	
+	while(1){
+		temp_1 = USART_ReadData(config.usart);
+>>>>>>> 833e508470e45a4c18d086b1920e221120141996
 	}
 	
-}
+} 
 
 
 void SPI1_IRQHandler(){
-	dem = SPI_ReadData(SPIx1);
+	SPI_HandleError(SPIx1);
 }
 
 
