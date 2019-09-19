@@ -186,7 +186,7 @@ typedef struct{
 }STK_Typedef;
 
 
-#ifdef USE_UART
+#ifdef __STM32F10X_USART__
 
 typedef struct{
 	volatile uint32_t*	SR;
@@ -200,7 +200,7 @@ typedef struct{
 
 #endif
 
-#ifdef USE_SPI
+#ifdef __STM32F10X_SPI__
 typedef struct{
 	volatile uint32_t*	CR1;
 	volatile uint32_t*	CR2;
@@ -320,7 +320,7 @@ extern AFIO_Typedef		AFIO;
 extern EXTI_Typedef		EXTI;
 extern STK_Typedef		STK;
 
-#ifdef USE_UART
+#ifdef __STM32F10X_USART__
 extern USART_Typedef	USART1;
 extern USART_Typedef	USART2;
 extern USART_Typedef	USART3;
@@ -328,7 +328,7 @@ extern USART_Typedef	UART4;
 extern USART_Typedef	UART5;
 #endif
 
-#ifdef USE_SPI
+#ifdef __STM32F10X_SPI__
 extern SPI_Typedef		SPI1;
 extern SPI_Typedef		SPI2;
 extern SPI_Typedef		SPI3;

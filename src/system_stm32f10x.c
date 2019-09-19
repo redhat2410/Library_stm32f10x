@@ -9,25 +9,35 @@ GPIO_Typedef		GPIOD;
 GPIO_Typedef		GPIOE;
 AFIO_Typedef		AFIO;
 EXTI_Typedef		EXTI;
-#ifdef	USE_UART
+
+
+#ifdef	__STM32F10X_USART__
 USART_Typedef		USART1;
 USART_Typedef		USART2;
 USART_Typedef		USART3;
 USART_Typedef		UART4;
 USART_Typedef		UART5;
 #endif
+
+
 NVIC_Typedef		NVIC;
 SCB_Typedef			SCB;
 STK_Typedef			STK;
-#ifdef	USE_SPI
+
+
+#ifdef	__STM32F10X_SPI__
 SPI_Typedef			SPI1;
 SPI_Typedef			SPI2;
 SPI_Typedef			SPI3;
 #endif
+
+
 #ifdef	USE_I2C
 I2C_Typedef			I2C1;
 I2C_Typedef			I2C2;
 #endif
+
+
 #ifdef	USE_TIM
 TIM1_8_Typedef		TIM1;
 TIM2_5_Typedef		TIM2;
@@ -225,7 +235,7 @@ void EXTI_init(void){
 	EXTI.SWIER		=	(uint32_t*)0x40010410;
 	EXTI.PR				=	(uint32_t*)0x40010414;
 }
-#ifdef	USE_UART
+#ifdef	__STM32F10X_USART__
 void USART1_init(void){
 	USART1.SR				=	(uint32_t*)0x40013800;
 	USART1.DR				=	(uint32_t*)0x40013804;
@@ -340,7 +350,7 @@ void SCB_init(void){
 	
 }
 
-#ifdef	USE_SPI
+#ifdef	__STM32F10X_SPI__
 void SPI1_init(void){
 	SPI1.CR1			=	(uint32_t*)0x40013000;
 	SPI1.CR2			=	(uint32_t*)0x40013004;
@@ -490,10 +500,12 @@ void peripheral_register_init(void){
 	NVIC_init();
 	SYST_init();
 	SCB_init();
-#ifdef	USE_UART
+	
+	
+#ifdef	__STM32F10X_USART__
 	USART_register_init();
 #endif
-#ifdef	USE_SPI
+#ifdef	__STM32F10X_SPI__
 	SPI_register_init();
 #endif
 #ifdef	USE_I2C

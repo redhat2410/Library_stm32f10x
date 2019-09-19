@@ -33,6 +33,17 @@
 /********************************Description SPI******************************/
 #define __STM32F10X_SPI_H
 
+/*
+	Define error code in SPI
+*/
+
+#define SPI_ERR_BSY		0x0080
+#define SPI_ERR_OVR		0x0040
+#define SPI_ERR_MODF	0x0020
+#define SPI_ERR_CRC		0x0010
+#define	SPI_ERR_UDR		0x0008
+
+/*************************/
 //SPIx
 typedef enum{
 	SPIx1		=	(1 << 12),
@@ -139,5 +150,6 @@ unsigned char SPI_ReadData(SPIx SPI);
 void SPI_WriteData_16bit(SPIx SPI, unsigned short data);
 unsigned short SPI_ReadData_16bit(SPIx SPI);
 unsigned int SPI_HandleError(SPIx SPI);
+unsigned char SPI_Error(SPIx SPI);
 /**************SPI FUNCTION CONFIGURATION**************/
 

@@ -1,7 +1,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_usart.h"
 
-#ifdef	USE_UART
+#ifdef	__STM32F10X_USART__
 
 USART_Typedef* USART_SELECT_X(USARTX usart){
 	USART_Typedef* tmp;

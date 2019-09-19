@@ -1,7 +1,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_spi.h"
 
-#ifdef	USE_SPI
+#ifdef	__STM32F10X_SPI__
 
 SPI_Typedef*	SPI_SELECT_X(SPIx SPI){
 	SPI_Typedef* tmp;
@@ -35,13 +35,9 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 	if(mode == SPI_MASTER){
 		//set baud rate only mode master
 		*spi->CR1	|= (baud << 3);
-<<<<<<< HEAD
 		// In mode master, config clock and NSS
 		*spi->CR1 &= ~(1 << 1); //config bit CPOL in CR1
 		*spi->CR1 &= ~(1 << 0); //config bit CPHA in CR1
-=======
-		
->>>>>>> 833e508470e45a4c18d086b1920e221120141996
 		//config NSS in SOFTWARE (HARDWARE)
 		/*
 			How to config NSS pin
@@ -52,11 +48,8 @@ void SPI_configuration(SPIx SPI, SPI_MODE mode, SPI_FRAME frame, SPI_BAUDRATE ba
 		*/
 		*spi->CR1 |= (1 << 9); //config bit SSM
 		*spi->CR1 |= (1 << 8); //config bit SSI
-<<<<<<< HEAD
 		//set mode master
 		*spi->CR1 |= (1 << 2);
-=======
->>>>>>> 833e508470e45a4c18d086b1920e221120141996
 	}
 	else{
 		//set mode slave
@@ -257,6 +250,13 @@ uint32_t SPI_HandleError(SPIx SPI){
 	if((*spi->SR & (uint32_t)0x40) == (uint32_t)0x40)
 		temp = *spi->DR;
 	return temp;
+}
+
+uint8_t SPI_Error(SPIx SPI){
+	SPI_Typedef* spi = SPI_SELECT_X(SPI);
+	uint8_t ret = 0x01;
+	if((*spi->SR & (uint32_t)SPI_ERR_MODF) == SPI_ERR_MODF) ret = 0x00;
+	return ret;
 }
 
 
