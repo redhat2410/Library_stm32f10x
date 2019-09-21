@@ -2,13 +2,16 @@
 #include "stm32f10x_spi.h"
 #include "stm32f10x.h"
 
-uint8_t data = 0;
-uint8_t loop = 0;
+uint8_t data	= 0;
+uint8_t loop	= 0;
+uint8_t i 		= 0;
+
+BIT read;
 
 int main(){
 	
 	SPI_Configure config;
-	uint8_t i = 0;
+	
 	// Init register
 	peripheral_register_init();
 	SystemInit();
@@ -20,11 +23,15 @@ int main(){
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 7); //MOSI
 	GPIO_configuration(GPIOPORT_A, MODE_OUTPUT_50M, OUT_PUSHPULL, 4);		//NSS
 	
-	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 14); //NSS
+	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_PUSHPULL, 14); //NSS
 	
 	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_PUSHPULL, 13); // LED error
 	
-	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_AFPUSHPULL, 15); //PWR_UP
+	GPIO_configuration(GPIOPORT_C, MODE_OUTPUT_50M, OUT_PUSHPULL, 15); //PWR_UP
+	
+	GPIO_configuration(GPIOPORT_B, MODE_INPUT, IN_PULLUpDown, 0); // TRX_CE
+	
+	GPIO_configuration(GPIOPORT_B, MODE_OUTPUT_50M, OUT_PUSHPULL, 1); // TX_EN
 	
 	//Config SPI1
 
@@ -42,18 +49,22 @@ int main(){
 	GPIO_WriteBit(GPIOPORT_C, 13, (BIT)SPI_Error(SPIx1));
 	
 	//Mode power down and SPI programming
-	GPIO_WriteBit(GPIOPORT_C, 15, BIT_RESET);
+	// Active mode - Radio Enable - ShockBurst TX
+	// PWR_UP = 1 - TRX-CE = 1 - TX-EN = 0
+	GPIO_WriteBit(GPIOPORT_C, 15, BIT_SET);		//	Set PWR_UP	High
+//	GPIO_WriteBit(GPIOPORT_B, 0, BIT_RESET);		//	Set TRX-CE	High
+	GPIO_WriteBit(GPIOPORT_B, 1, BIT_SET);		//	Set TX-EN		High
+	
+	read = GPIO_ReadBit(GPIOPORT_B, 0);
 	
 	GPIO_WriteBit(GPIOPORT_A, 14, BIT_RESET);
-	SPI_WriteData(SPIx1, 0x10);
+	SPI_WriteData(SPIx1, 0x01);
 	delay_ms(10);
-	SPI_WriteData(SPIx1, 0x19);
+	SPI_WriteData(SPIx1, 0x00);
 	GPIO_WriteBit(GPIOPORT_A, 14, BIT_SET);
-	GPIO_WriteBit(GPIOPORT_A, 14, BIT_RESET);
-	SPI_WriteData(SPIx1, 0x10);
-	delay_ms(10);
-	SPI_WriteData(SPIx1, 0x10);
-	GPIO_WriteBit(GPIOPORT_A, 14, BIT_SET);
+	
+
+	
 	while(1);
 }
 
@@ -62,3 +73,4 @@ int main(){
 void SPI1_IRQHandler(void){
 	data = SPI_ReadData(SPIx1);
 }
+
